@@ -2,7 +2,7 @@
 
 import java.awt.*;
 
-	public class Mouse {
+	public class Background {
 
 		//VARIABLE DECLARATION SECTION
 		//Here's where you state which variables you are going to use.
@@ -22,7 +22,7 @@ import java.awt.*;
 
 		//This is a constructor that takes 3 parameters.  This allows us to specify the object's name and position when we build it.
 		// if you put in a String, an int and an int the program will use this constructor instead of the one above.
-		public Mouse(int pXpos, int pYpos) {
+		public Background(int pXpos, int pYpos) {
 
 			xpos = pXpos;
 			ypos = pYpos;
@@ -38,12 +38,12 @@ import java.awt.*;
 		} // constructor
 
 
-		public Mouse(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
+		public Background(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
 
 			xpos = pXpos;
 			ypos = pYpos;
-			width = 50;
-			height = 50;
+			width = 1000;
+			height = 900;
 			dx = dxParameter;
 			dy = dyParameter;
 			pic = picParameter;
@@ -60,12 +60,10 @@ import java.awt.*;
 			xpos = xpos + dx;
 			ypos = ypos + dy;
 
-			if (xpos > 1000 - width || xpos < 0) {
-				dx = -dx;
-			}
 
-			if (ypos < 0 || ypos + height > 700) {
-				dy = -dy;
+
+			if (ypos <-699) {
+				ypos=700;
 			}
 
 			rec = new Rectangle(xpos, ypos, width, height);

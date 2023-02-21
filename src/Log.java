@@ -3,7 +3,7 @@
 
 import java.awt.*;
 
-public class Cheese {
+public class Log {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
@@ -23,7 +23,7 @@ public class Cheese {
 
     //This is a constructor that takes 3 parameters.  This allows us to specify the object's name and position when we build it.
     // if you put in a String, an int and an int the program will use this constructor instead of the one above.
-    public Cheese(int pXpos, int pYpos) {
+    public Log(int pXpos, int pYpos) {
 
         xpos = pXpos;
         ypos = pYpos;
@@ -39,11 +39,11 @@ public class Cheese {
     } // constructor
 
 
-    public Cheese(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
+    public Log(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
 
         xpos = pXpos;
         ypos = pYpos;
-        width = 50;
+        width = 300;
         height = 50;
         dx = dxParameter;
         dy = dyParameter;
@@ -65,8 +65,8 @@ public class Cheese {
             dx = -dx;
         }
 
-        if (ypos < 0 || ypos + height > 700) {
-            dy = -dy;
+        if (ypos < 0) {
+            ypos=650;
         }
 
         rec = new Rectangle(xpos, ypos, width, height);

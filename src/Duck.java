@@ -1,7 +1,7 @@
 
 import java.awt.*;
 
-public class Player {
+public class Duck {
 
 
     public int xpos;                //the x position
@@ -21,12 +21,12 @@ public class Player {
     public boolean up;
 
 
-    public Player(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
+    public Duck(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
 
         xpos = pXpos;
         ypos = pYpos;
         width = 100;
-        height = 100;
+        height = 70;
         dx = dxParameter;
         dy = dyParameter;
         pic = picParameter;
@@ -47,14 +47,14 @@ public class Player {
         } else { // (right == false && left == false)
             dx = 0;
         }
-
-        if(down == true){
-            dy = 2;
-        } else if (up == true) {
-            dy = -2;
-        } else {
-            dy = 0;
-        }
+//
+//        if(down == true){
+//            dy = 2;
+//        } else if (up == true) {
+//            dy = -2;
+//        } else {
+//            dy = 0;
+//        }
 
         if(xpos>1000-width){ // right
             xpos = 1000-width;
@@ -62,9 +62,9 @@ public class Player {
         if(xpos < 0) { // left
             xpos = 0;
         }
-        if(ypos>650-height){ // down
-            ypos = 650-height;
-        }
+//        if(ypos>650-height){ // down
+//            ypos = 650-height;
+//        }
         if(ypos < 0) { // up
             ypos = 0;
         }
@@ -75,29 +75,29 @@ public class Player {
 
     }
 
-    public void move2() {
-        xpos = xpos + dx;
-        ypos = ypos + dy;
-
-        if (ypos < 250) {
-            dy = dy + 1;
-        }
-        if (ypos > 250) {
-            ypos = 250;
-        }
-
-        if(xpos>1000-width){ // right
-            xpos = 1000-width;
-        }
-        if(xpos < 0) { // left
-            xpos = 0;
-        }
-        if(ypos>650-height){ // down
-            ypos = 650-height;
-        }
-        if(ypos < 0) { // up
-            ypos = 0;
-        }
-    }
+//    public void move2() {
+//        xpos = xpos + dx;
+//        ypos = ypos + dy;
+//
+//        if (ypos < 250) {
+//            dy = dy + 1;
+//        }
+//        if (ypos > 250) {
+//            ypos = 250;
+//        }
+//
+//        if(xpos>1000-width){ // right
+//            xpos = 1000-width;
+//        }
+//        if(xpos < 0) { // left
+//            xpos = 0;
+//        }
+//        if(ypos>650-height){ // down
+//            ypos = 650-height;
+//        }
+//        if(ypos < 0) { // up
+//            ypos = 0;
+//        }
+//    }
 
 }
