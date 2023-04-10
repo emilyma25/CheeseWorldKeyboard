@@ -33,17 +33,17 @@ public class Log {
         dy = -5;
         isAlive = true;
         hits = 0;
-        rec = new Rectangle(xpos, ypos, width, height);
+        rec = new Rectangle(xpos-50, ypos, width-50, height);
 
 
     } // constructor
 
 
-    public Log(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
+    public Log(int pXpos, int pYpos, int dxParameter, int dyParameter, int sWidth, Image picParameter) {
 
         xpos = pXpos;
         ypos = pYpos;
-        width = 300;
+        width = sWidth;
         height = 50;
         dx = dxParameter;
         dy = dyParameter;
@@ -66,7 +66,8 @@ public class Log {
         }
 
         if (ypos < 0) {
-            ypos=650;
+            ypos=1050;
+            width = (int)(200+(Math.random()*400));
         }
 
         rec = new Rectangle(xpos, ypos, width, height);

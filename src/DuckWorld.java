@@ -26,13 +26,17 @@ public class DuckWorld implements Runnable, KeyListener {
 
     //Sets the width and height of the program window
     final int WIDTH = 1000;
-    final int HEIGHT = 650;
+    final int HEIGHT = 700;
 
     //Declare the variables needed for the graphics
     public JFrame frame;
     public Canvas canvas;
     public JPanel panel;
     public BufferStrategy bufferStrategy;
+
+    public boolean gamePlaying;
+    public boolean gameOver;
+
 
     //Declare the variables needed for images
     public Image floorPic;
@@ -43,9 +47,11 @@ public class DuckWorld implements Runnable, KeyListener {
     //Declare the character objects
     public Background background1;
     public Background background2;
-    public Log theFloor;
     public Duck duck;
     public Log [] Logs;
+    public Log [] RightLogs;
+    public boolean Collide=false;
+    public double distanceCounter;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -68,21 +74,26 @@ public class DuckWorld implements Runnable, KeyListener {
         //load images
         floorPic = Toolkit.getDefaultToolkit().getImage("log.png");
         backgroundPic = Toolkit.getDefaultToolkit().getImage("dirt.png");
-        duckPic = Toolkit.getDefaultToolkit().getImage("duck.png");
+        duckPic = Toolkit.getDefaultToolkit().getImage("real duck.png");
         explosionPic = Toolkit.getDefaultToolkit().getImage("explosion.png");
 
         //create (construct) the objects needed for the game
 
-        background2 = new Background(0, 1, 0, -1, backgroundPic);
-        background1 = new Background(0, 700, 0, -1, backgroundPic);
-        theFloor = new Log(0, 300, 0, -1, floorPic);
-        duck = new Duck(250, 100, 0, -1, duckPic);
+        background2 = new Background(0, 1, 0, -2, backgroundPic);
+        background1 = new Background(0, 700, 0, -2, backgroundPic);
+        duck = new Duck(200, 540, 0, -1, duckPic);
 
-        Logs = new Log[8];
+        Logs = new Log[7];
         for (int i=0; i<Logs.length; i++){
-            Logs [i] = new Log(0,(int) (Math.random()*700)+0,(int) (Math.random()*8)+0,(int) (Math.random()*8)+0,floorPic);
+            Logs [i] = new Log(0,i*150,0,-2,(int)(100+(Math.random()*600)), floorPic);
         }
 
+        RightLogs = new Log[7];
+        for (int i=0; i<Logs.length;i++){
+            int RightWidth = 800-Logs[i].width;
+            RightLogs[i]=new Log(1000-RightWidth,i*150,0,-2,RightWidth,floorPic);
+
+        }
 
     } // CheeseWorld()
 
@@ -95,30 +106,41 @@ public class DuckWorld implements Runnable, KeyListener {
     public void moveThings() {
         background1.move();
         background2.move();
-        theFloor.move();
         duck.move();
-
-    }
-
-    public void collision(){
-        if (duck.ypos<5){
-            duck.isAlive=false;
-
+        for (int i=0; i<Logs.length; i++){
+            Logs[i].move();
+            RightLogs[i].width=800-Logs[i].width;
+            RightLogs[i].xpos=1000-RightLogs[i].width;
+            RightLogs[i].move();
         }
 
+
     }
 
-    public void checkIntersections() {
 
+
+
+    public void checkIntersections() {
+        if (duck.ypos < 0 || duck.ypos>700) {
+            duck.isAlive = false;
+        }
+        duck.Collide = false;
+        for (int i = 0; i < 7; i++) {
+            if (duck.rec.intersects(Logs[i].rec) || duck.rec.intersects(RightLogs[i].rec)) {
+                duck.Collide = true;
+            }
+        }
     }
 
     public void run() {
         while (true) {
-            moveThings();           //move all the game objects
+            if(!gamePlaying){
+                moveThings();           //move all the game objects
+            }
             checkIntersections();   // check character crashes
             render();               // paint the graphics
             pause(20);         // sleep for 20 ms
-            collision();
+            counter();
         }
     }
 
@@ -131,27 +153,56 @@ public class DuckWorld implements Runnable, KeyListener {
         g.drawImage(background1.pic, background1.xpos, background1.ypos, background1.width, background1.height, null);
         g.drawImage(background2.pic, background2.xpos, background2.ypos, background2.width, background2.height, null);
        // g.drawImage(theFloor.pic, theFloor.xpos+100, theFloor.ypos, theFloor.width, theFloor.height, null);
-        g.drawImage(duck.pic, duck.xpos, duck.ypos, duck.width, duck.height, null);
+
         //g.drawImage(theFloor.pic, theFloor.xpos, theFloor.ypos, theFloor.width, theFloor.height, null);
 
-        for (int i=0; i<8; i++){
-            g.drawImage(theFloor.pic, theFloor.xpos, theFloor.ypos, theFloor.width, theFloor.height, null);
+        for (int i=0; i<7; i++){
 
+            g.drawImage(floorPic, Logs[i].xpos, Logs[i].ypos, Logs[i].width, Logs[i].height, null);}
+
+
+        for (int i=0; i<7; i++){
+            g.drawImage(floorPic, RightLogs[i].xpos, RightLogs[i].ypos, RightLogs[i].width, RightLogs[i].height, null);
         }
-
+        g.drawImage(duck.pic, duck.xpos, duck.ypos, duck.width, duck.height, null);
         g.dispose();
         bufferStrategy.show();
 
         if (duck.isAlive==false){
-            System.out.println("hello");
-            duck = new Duck(250, 0, 0, 0, explosionPic);
+            duck.dy=0;
+
+            if (duck.ypos<0){
+                duck.ypos=0;
+            }
+            else{
+                duck.ypos=700-duck.height;
+            }
+            duck.pic=explosionPic;
             background2 = new Background(0, background2.ypos, 0, 0, backgroundPic);
             background1 = new Background(0, background1.ypos, 0, 0, backgroundPic);
-            theFloor = new Log(0, theFloor.ypos, 0, 0, floorPic);
-
+           // Logs = new Log[7];
+            for (int i=0; i<Logs.length; i++){
+                Logs[i].dx=0; //= new Log(0,Logs[i].ypos,0,0,Logs[i].width, floorPic);
+                Logs[i].dy=0;
+            }
+            //RightLogs = new Log[7];
+            for (int i=0; i<RightLogs.length; i++){
+                RightLogs[i].dx=0; //= new Log(0,Logs[i].ypos,0,0,Logs[i].dy, floorPic);
+                RightLogs[i].dy=0;
+            }
 
         }
 
+        if (!gamePlaying){
+            //start screen
+        }
+        else if (gamePlaying && !gameOver){
+            //playing game
+        }
+
+        else {
+            //game over
+        }
     }
 
     /***
@@ -207,6 +258,14 @@ public class DuckWorld implements Runnable, KeyListener {
         // handles a press of a character key (any key that can be printed but not keys like SHIFT)
         // we won't be using this method, but it still needs to be in your program
     }//keyTyped()
+
+    public void counter(){
+        if(duck.isAlive==true){
+            distanceCounter=(distanceCounter+1);
+            System.out.println(distanceCounter);
+        }
+
+    }
 
 
     //Graphics setup method

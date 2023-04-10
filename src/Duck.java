@@ -20,30 +20,42 @@ public class Duck {
     public boolean down;
     public boolean up;
 
+    public boolean Collide;
 
     public Duck(int pXpos, int pYpos, int dxParameter, int dyParameter, Image picParameter) {
 
         xpos = pXpos;
         ypos = pYpos;
-        width = 100;
-        height = 70;
+        width = 70;
+        height = 55;
         dx = dxParameter;
         dy = dyParameter;
         pic = picParameter;
         isAlive = true;
         rec = new Rectangle(xpos, ypos, width, height);
+        Collide=false;
 
     } // constructor
 
     //move( ) method for a keyboard controlled character
     public void move() {
+        if (Collide==false){
+            dy=4;
+        }
+        else{
+            dy=-2;
+        }
+            //if collide == false,
+                //make it fall
+            //else collide == true,
+                //dy is same as logs
         xpos = xpos + dx;
         ypos = ypos + dy;
 
         if(right == true){
-           dx = 2;
+           dx =3;
         } else if (left == true) {
-            dx = -2;
+            dx = -3;
         } else { // (right == false && left == false)
             dx = 0;
         }
@@ -65,8 +77,8 @@ public class Duck {
 //        if(ypos>650-height){ // down
 //            ypos = 650-height;
 //        }
-        if(ypos < 0) { // up
-            ypos = 0;
+        if(ypos < -10) { // up
+            ypos = -10;
         }
 
 
